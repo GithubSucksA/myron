@@ -1,0 +1,119 @@
+#functional components
+#Plain JS function die props als argument kan accepteren en JSX react element returned
+#Zonder hooks zijn het gewone functies die top down runnen en dan weg zijn
+#Met hooks worden ze wel stateful
+#Bij het doorgeven van props kunnen we kiezen om props mee te geven en daar van af te lezen props.x props.you
+#We kunnen ook de props uitpakking (destructuring) dan plaatsen we de value die er op leven in {} (props) --> word ({waarde1, waarde2})
+
+import React, states from “react”;
+
+const Name = (props) => {
+    useStates
+    useEffects
+    other handler functions or states
+
+    return (alleen haakjes nodig bij meer dan 1 line return)
+}
+
+export default Name;
+
+
+import React, { useState } from "react";
+
+#function FunctionalComponent() {return <h1>aaa</h1>};  Zelfde idee maar andere syntax  
+const FunctionalComponent = () => {    #Belangrijk om de functie met Hoofdletter te beginnen to mark it as React Function
+    const [count, setCount] = useState(0);
+  
+    const increase = () => {
+        setCount(count + 1);
+    }
+  
+    return (
+        <div style={{ margin: '50px' }}>
+            <h1>Welcome to Geeks for Geeks </h1>
+            <h3>Counter App using Functional Component : </h3>
+            <h2>{count}</h2>
+            <button onClick={increase}>Add</button>
+        </div>
+    )
+}
+  
+export default FunctionalComponent;
+
+
+#class components
+#Required dat we van een React.Component extenden en dat we een render functie gebruiken om JSX element te returnen
+#De class component moet initiated worden en bevat dan meerdere lifecycles die actief zijn in verschillende phases van het component
+#Deze lifycycle methods maken deze componenten ook van nature al stateful
+#De constructor moet gebruikt worden omdat deze ook de state stored
+#Class components krijgen van nature this.props mee om de doorgegeven probs van hun parents uit te lezen van wanneer ze worden geinitieerd in de parent component
+
+import React, { Component } from "react"';
+#Doordat hier Component word geimport zouden we hier onder bij het inheriten van de React.Component base class React weg kunnen laten
+#Wanneer we hooks gebruiken(functional components) doen we ze normaal ook boven aan importen, maar hier geld hetzelfde dat deze op React. leven
+
+class Name extends React.Component {
+	render () {
+		return (alleen haakjes nodig bij meer dan 1 line return);
+	}
+}
+
+
+
+import React, { Component } from "react";
+#“The constructor for a React component is called before it is mounted. When implementing the constructor for a React.Component subclass,
+#you should call super(props) before any other statement. Otherwise, this.props will be undefined in the constructor, which can lead to bugs.”  
+#In the constructor component gebruiken we this.state om de initial state te zetten daarna setState.
+class ClassComponent extends React.Component {
+    constructor(props) {      #initializer die altijd samen met super(props) gecalled moet worden
+        super(props);
+        this.state = {	 #state moet initieel geset worden in dictionary stijl
+            count: 0
+        };
+        this.increase = this.increase.bind(this);   #VERPLICHT  Standaard binding van helper functies aan this wat moet gebeuren bij class components
+    }
+  
+    increase() {     # ruimte voor helper functies
+        this.setState({ count: this.state.count + 1 }); #Hoeven niet persé this.setState in een andere functie te stoppen
+														#accepteert state en props als argumenten (props van parent && states van eigen component)
+    }
+  
+    render() {    #render return
+        return (
+            <div style={{ margin: '50px' }}>
+                <h1>Welcome to Geeks for Geeks </h1>
+                <h3>Counter App using Class Component : </h3>
+                <h2> {this.state.count}</h2> 
+                <button onClick={this.increase}> Add</button>
+  
+            </div>
+        )
+    }
+}
+  
+export default ClassComponent;
+
+#DIFFERENCE BETWEEN FUNCTIONAL AND CLASS COMPONENTS
+#In the above example, for functional components, we use hooks (useState) to manage the state. If you write a function component and realize you need to add some state to it,
+#previously you had to convert it to a class component. Now you can use a Hook inside the existing function component to manage the state and no need to convert it into the Class component. 
+#Instead of Classes, one can use Hooks in the Functional component as this is a much easier way of managing the state. Hooks can only be used in functional components, not in-class components.
+
+#LIFECYCLE COMPONENTS https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
+#Waar class components Lifecycles gebruiken, gebruiken functional Components hooks
+#componentDidMount == useEffect() deze functies worden eenmaal gecalled na de eerste render van component (dus wanneer het mounted word to the DOM)
+#Bij useEffect() geven we een functie mee als argument. De functie die na eerste render uitgevoerd moeten worden. 
+	#Als 2de argument kunnen we een lege array [] meegeven om slechts één keer te runnen na eerste render van component
+	#Als we in deze array bv de waarde van een state plaatsen triggered de useEffect functie na iedere state change render
+#componentWillUnmount == useEffect hier gebruiken we useEffect ook voor, maar deze lifecycle method gebruiken we wanneer een component opgeruimd word om eerste nog dit te runnen
+	#Gebruiken we vaak om clearInterval te callen
+#componentDidUpdate(prevProps, prevState, snapshot) == useState(prevprops, prevstate, snapshot)  deze functies worden iedere keer gecalled na een rerender van een component (meestal door state change)
+	#W mogen direct setState callen (of this.setState) maar dit moet wel in een conditie zitten want anders hebben we een infinite loop
+
+#RENDER LOGICA
+
+#Dit stuk JSX zouden we in een return van een Render functie tegenkomen. We lezen een boolean state uit om te bepalen welke html gerendered word
+{this.state.change ? (
+<h1>Welcome to Let’s React</h1>
+) : (
+<h1>Learn about the concepts of Reactjs</h1>
+)}
