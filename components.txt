@@ -21,7 +21,7 @@ export default Name;
 import React, { useState } from "react";
 
 #function FunctionalComponent() {return <h1>aaa</h1>};  Zelfde idee maar andere syntax  
-const FunctionalComponent = () => {    #Belangrijk om de functie met Hoofdletter te beginnen to mark it as React Function
+const FunctionalComponent = () => {    #Belangrijk om de functie met Hoofdletter te beginnen to mark it as React Function en binnen zo'n functies zijn helper functies zoals normale functie met een kleine beginnende letter
     const [count, setCount] = useState(0);
   
     const increase = () => {
@@ -106,8 +106,26 @@ export default ClassComponent;
 	#Als we in deze array bv de waarde van een state plaatsen triggered de useEffect functie na iedere state change render
 #componentWillUnmount == useEffect hier gebruiken we useEffect ook voor, maar deze lifecycle method gebruiken we wanneer een component opgeruimd word om eerste nog dit te runnen
 	#Gebruiken we vaak om clearInterval te callen
-#componentDidUpdate(prevProps, prevState, snapshot) == useState(prevprops, prevstate, snapshot)  deze functies worden iedere keer gecalled na een rerender van een component (meestal door state change)
+#componentDidUpdate(prevProps, prevState, snapshot) == useEffect()  deze functies worden iedere keer gecalled na een rerender van een component (meestal door state change)
 	#W mogen direct setState callen (of this.setState) maar dit moet wel in een conditie zitten want anders hebben we een infinite loop
+		#voor useEffect hebben we hier het 2de argument de [] voor die aangeeft op welke events we willen dat die vuurt.
+		#under the hood heeft react de waarde van de vorige render zitten van bv de state in deze array en die word vergeleken met de huidige waarde om te zien of een rerender nodig is
+		#de return function die dus voor componentWillUnmount staat kan ook gebruik maken van dit 2de argument.
+#Als we met useEffect een functie returnen (dit geld voor functional components) dan weet React dat deze functie voor de componentWillUnmount staat
+	#Deze functie word dus alleen gerunned als de component gaat unmounten voor clean-up van bv data-streams waarop connected is geworden of online status.	
+#We kunnen meerdere useEffects gebruiken binnen een component. Dit kan handig zijn om ze apart te houden voor verschillende states of omdat we logica voor DidMount en WillUnmount apart willen houden van de DidUpdate(states vaak) die bij iedere rerender runned
+	#useEffect word namelijk voor deze alle 3 gebruikt.
+
+#De order van hoe we hooks callen is belangrijk. Ze worden top down uitgevoerd en daarna als een batch afgeleverd bij de render.
+#Hooks moeten gecalled worden 'at the top state level'. Betekent dat ze niet in bv loop / if conditie / functie zijn verwerkt.
+#Under the hood heeft react 'een shallow copy' van de orde van uitvoering van de vorige render waardoor de volgende sneller gaat.
+	#Als dan doordat we een hook een level te diep gebruiken een hook niet uitgevoerd word door condities dan krijgen we bugs omdat react anders verwacht.
+#Stel we gebruiken over meerdere files dezelfde type volgorde en logica van hooks dan kunnen we deze extracten naar een eigen file en in een functie stoppen (custom hook) en vaker gebruiker over componenten.
+	#Deze custom hooks willen we als standaard naming convention beginnen met 'use' en de states en effects zijn geisoleerd voor de 2 componenten die bv deze zelfde hook gebruiken. 
+#!! Redux is een react library die andere type state management meebrengt met een global store. Dit is handig voor huge apps.
+
+#We kunnen een component resetten door een <Form key={version} /> tag te includen in ons component.
+	#Zodra de waarde van de key veranderd word de hele component gereset naar zijn eerste vorm.
 
 #RENDER LOGICA
 
@@ -118,4 +136,31 @@ export default ClassComponent;
 <h1>Learn about the concepts of Reactjs</h1>
 )}
 
-Test new branch
+
+#HOW TO USE GIT AND GITHUB
+#https://github.com/settings/keys make an ssh connection with github
+	#For this you want to create the ssh private and public key
+	#/home/user_name/.ssh/id_rsa standaard plek waar private key leeft. .pub extension is de public. 
+	#LINUX(git bash) ssh-keygen -t rsa  //  ssh-keygen -b 2048 -t rsa   (2de command mocht meer bytes nodig zijn)
+	#WINDOWS blijkbaar met applicaties zoals PuTTY?? 
+#Install git and Github. Don't use a gui for git but something like git bash command line
+#git init    Als we in de directory zijn moeten we in de command line git init initeel doen om de directory in een git handelbare repository om te zetten
+	#eenmalige actie binnen een directory (ziet volgens mij dan ook een file in de map komen voor de git commands ofzo)
+#git add .    punt is een wildcard van add all files die veranderd zijn. Kunnen hier specifieker doorgeven. Zet files klaar voor te gaan uploaden naar github.
+#git commit -m 'commit message here'     zet de files die added zijn klaar voor commit, nu zijn ze echt staged voor wanneer we pushen
+#git status     kunnen we tussendoor doen om de lijst van added of staged to commit files te bekijken
+#git push      om de files naar github te sturen
+
+#git clone url (git@github.com:GithubSucksA/myron.git)    om een repo naar local te clonen. Zo kan je bijvoorbeeld de main branch naar je eigen halen.
+
+--->dit zijn eenmalige handelingen die we moeten doen bij het aanmaken, veranderen, available maken van branches
+#Wanneer we aan een project werken willen we met die repository in github connecten vanuit de command line
+#initieel moeten we hiervoor !!   git remote add origin "url van repository"   doen zodat we connected zijn naar de repository
+#git branch naambranch     dit call je nu om je eigen branch aan te maken
+#git checkout naambranch     om naar een andere branch te gaan
+#git push --set-upstream origin naambranch     om de branch toegankelijk te maken voor upstream
+!!Meer onderzoek nodig naar master branch beveiliging
+
+#STATES VS PROBS
+#state handled een eigen component zijn waardes VS probs zijn de waarde die vanuit de parent worden doorgegeven
+#we kunnen wel vanuit een parent een state doorgeven als een prop naar kinderen. Zo kunnen we ook over meerdere kinderen dezelfde state maintainen die leeft in de parent.
