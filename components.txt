@@ -139,6 +139,9 @@ export default ClassComponent;
 #Als onze componenten langzaam zijn bij een re-render kunnen we beginnen na te denken over memoization.
 #Als we een component re-renderen dan worden ook recursively zijn children re-rendered. Hiervoor kan ook useMemo handig zijn. Als dan de props ongewijzigd blijven vanuit de parent vind wederom alles vanuit cache plaats. (zelfs geen rerendering van child component)
 
+#useContext kunnen we gebruiken als we een state willen delen maar daar meerdere nesting levels diep voor moeten gaan. Dit is een gemakkelijk te gebruiken hook die ons de state in een object laten zetten van de hoogste parent.
+--Vervolgens hoeven we de state niet bv 5 keer als prop door te geven maar slechts de useContext.Provider in de initiele component aan te maken en de useContext in de componenten die ook de state nodig hebben te gebruiken.
+
 function handleClick() {
   setName('Robin');
   console.log(name); // Still "Taylor"!   #We zien hier nog niet Robin omdat de waarde pas up-to-date word vanaf de volgende render.
@@ -149,10 +152,42 @@ function handleClick() {     #De code hieronder doet de age variable maar met 1 
   setAge(age + 1); // setAge(42 + 1)
 }
 function handleClick() {    #Op deze manier werkt het we, omdat we nu een updater functie meegeven waar we dus de prevState als argument meegeven. Manipuleer dus op deze manier waneer er extra compulatie is op dezelfde variabele. waarvan de waarde gevolgd dient te worden.
-  setAge(a => a + 1); // setAge(42 => 43)
-  setAge(a => a + 1); // setAge(43 => 44)
+  setAge(a => a + 1); // setAge(42 => 43)   #deze functies noemen we updated functions en worden in een queue gezet om aan het einde van een functie uit te voeren. setNumber(number + 5) setNumber(n => n + 1) geeft 6 omdat de 2de queued word en updater function functionaliteit in de batching heeft.
+  setAge(a => a + 1); // setAge(43 => 44)   #callen we achter deze 2 functies hierboven nog een setNumber(42) dan zou dat de laatste in de queue zijn en die waarde uiteindelijk meegeven als final waarde.
   setAge(a => a + 1); // setAge(44 => 45)
 } 
+export default function RequestTracker() {
+  const [pending, setPending] = useState(0);
+  const [completed, setCompleted] = useState(0);
+
+  async function handleClick() {
+    setPending(pending + 1);
+    await delay(3000);
+    setPending(p => p - 1);  #doen we hier pending - 1 --> dan gaat na 3 seconde de state naar -1 ipv terug naar 0.
+    setCompleted(completed + 1);
+  }
+
+  return (
+    <>
+      <h3>
+        Pending: {pending}
+      </h3>
+      <h3>
+        Completed: {completed}
+      </h3>
+      <button onClick={handleClick}>
+        Buy     
+      </button>
+    </>
+  );
+}
+
+function delay(ms) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms);
+  });
+}
+
 const nextCount = count + 1;   #Hier een makkelijk voorbeeld van hoe we andere variabele kunnen gebruiken om hier ook verder mee te manipuleren en spelen. (Hier is count een state natuurlijk van useState)
 setCount(nextCount);
 console.log(count);     // 0
