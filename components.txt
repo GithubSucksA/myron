@@ -93,6 +93,7 @@ class ClassComponent extends React.Component {
   
 export default ClassComponent;
 
+
 #DIFFERENCE BETWEEN FUNCTIONAL AND CLASS COMPONENTS
 #In the above example, for functional components, we use hooks (useState) to manage the state. If you write a function component and realize you need to add some state to it,
 #previously you had to convert it to a class component. Now you can use a Hook inside the existing function component to manage the state and no need to convert it into the Class component. 
@@ -126,6 +127,60 @@ export default ClassComponent;
 
 #We kunnen een component resetten door een <Form key={version} /> tag te includen in ons component.
 	#Zodra de waarde van de key veranderd word de hele component gereset naar zijn eerste vorm.
+	
+#useState kunnen we gebruiken op een directe manier useState("newValue") of we kunnen een functie meegeven. Als we een functie meegeven is het belangrijk dat we de previousState als argument meegeven.
+	#De set functie die we meekrijgen bij initiating useState is pure en heeft dus geen return.
+	#De set functie past de waarde pas aan na de volgende render (staging of processes in a snapshot) als we dus in dezelfde logica van dezelfde render de waarde uitlezen krijgen we niet de updated value. (flushSync voor manipulatie hiervan)
+
+#useMemo kunnen we gebruiken wanneer we zwaardere calculaties runnen. We geven een pure function mee en een dependency list als argumenten.
+--De calculatie word in cache gestored en vervolgens uitgelezen tegenover de waardes in de dependency als deze verschillen word pas opnieuw de zwaardere calculatie uitgevoerd en de cache ge-update.
+#Stel we hebben wat componenten die zware JS erin hebben draaien, maar we hebben ook een colored them. Zodra we de colored them veranderen maar de andere waardes hetzelfde blijven is het handig useMemo te gebruiken.
+	#In dat geval merken we dat de theme heel snel switched omdat de rest van het component zijn state uit de cache uitleest na verificatie dat die states ook ongewijzigd zijn.
+#Als onze componenten langzaam zijn bij een re-render kunnen we beginnen na te denken over memoization.
+#Als we een component re-renderen dan worden ook recursively zijn children re-rendered. Hiervoor kan ook useMemo handig zijn. Als dan de props ongewijzigd blijven vanuit de parent vind wederom alles vanuit cache plaats. (zelfs geen rerendering van child component)
+
+function handleClick() {
+  setName('Robin');
+  console.log(name); // Still "Taylor"!   #We zien hier nog niet Robin omdat de waarde pas up-to-date word vanaf de volgende render.
+}
+function handleClick() {     #De code hieronder doet de age variable maar met 1 laten increasen, wederom de batching waarmee React werkt zorgt ervoor dat ze allemaal dezelfde initiele waarde + 1 geven.
+  setAge(age + 1); // setAge(42 + 1)
+  setAge(age + 1); // setAge(42 + 1)
+  setAge(age + 1); // setAge(42 + 1)
+}
+function handleClick() {    #Op deze manier werkt het we, omdat we nu een updater functie meegeven waar we dus de prevState als argument meegeven. Manipuleer dus op deze manier waneer er extra compulatie is op dezelfde variabele. waarvan de waarde gevolgd dient te worden.
+  setAge(a => a + 1); // setAge(42 => 43)
+  setAge(a => a + 1); // setAge(43 => 44)
+  setAge(a => a + 1); // setAge(44 => 45)
+} 
+const nextCount = count + 1;   #Hier een makkelijk voorbeeld van hoe we andere variabele kunnen gebruiken om hier ook verder mee te manipuleren en spelen. (Hier is count een state natuurlijk van useState)
+setCount(nextCount);
+console.log(count);     // 0
+console.log(nextCount); // 1  
+
+#State is read-only en niet mutable dus iedere keer vervangen we de waarde. Wanneer we een array of dictionary als state hebben word dit belangrijker want we kunnen niet de collection in state muteren,
+--We dienen deze dus vaak geheel te kopieren en daarna de addition toe te voegen of eroverheen mappen etc.
+#Stel we hebben dus een dictionary in onze state leven en we willen hier een waarde van updaten zodra een event getriggered word.
+	#Dan dienen we in de setState function het volgende te doen om de andere waardes uit te pakken in de nieuwe state setState({...prev, key: e.target.value})
+	#Alle keys die we niet specifiek adjusten maar wel al aanwezig waren worden door de ...prev syntax gekopieerd in het nieuwe object.
+	#Dit kan iets triggier worden wanneer we met nested dictionaries werken, want dan pakken we vaker uit in nested levels, maar het globale idee blijft volledig hetzelfde.
+const [person, setPerson] = useState({
+	name: 'Niki de Saint Phalle',
+	artwork: {
+	  title: 'Blue Nana',
+	  city: 'Hamburg',
+	  image: 'https://i.imgur.com/Sd1AgUOm.jpg',
+	}
+})
+	  function handleTitleChange(e) {   #Hier zien we dus dat als er meerdere persons aanwezig zouden zijn in de dictionary dat die allemaal uitgepakt worden en per person object word ook weer het interne object uitgepakt.
+    setPerson({
+      ...person,
+      artwork: {
+        ...person.artwork,
+        title: e.target.value
+      }
+    });
+  }
 
 #RENDER LOGICA
 
