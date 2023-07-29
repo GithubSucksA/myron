@@ -4,6 +4,7 @@ import TodoList from './Date';
 import UseCoin from './useCoin';
 import MouseTracker from './mouse';
 import Form from './form';
+import ShowWeather from './Weather';
 
 //<Number|0>
 function App() {
@@ -11,7 +12,7 @@ function App() {
   //const [todos, setTodos] = useState(createInitialTodos);   werkt als initializer en called 1 keer
   const [version, setVersion] = useState(0);
   const [firstName, setFirstName] = useState('');
-  
+
   const handleReset = () => {
     setVersion(version + 1);
   }
@@ -19,7 +20,9 @@ function App() {
   return (
     <div className="App">
       <header>
-        <div className='headDiv'></div>
+        <div className='headDiv1'>
+          <ShowWeather />
+        </div>
         <div className='headDiv'></div>
         <div className='headDiv'></div>
       </header>
@@ -33,7 +36,7 @@ function App() {
         <p>Edit this content to add your own quote</p>
       </blockquote>
       <TodoList />
-      <UseCoin name='eth' key={version}/>
+      <UseCoin name='eth'/>
       <UseCoin name='btc' />
       <MouseTracker />
       <button onClick={handleReset}>Reset Component</button>

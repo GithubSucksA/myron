@@ -16,7 +16,7 @@ function UseCoin(props) {
 
     useEffect(() => {
         localStorage.setItem(props.name, JSON.stringify(coin));
-    }, [coin]);
+    }, [coin]);  //By adding props.name the warning dissapears but props.name actually references the key of the coin state. key:props.name, value:coin
 
     const handleIncrement = () => {
         setCoin((prevCoin) => prevCoin + 1);

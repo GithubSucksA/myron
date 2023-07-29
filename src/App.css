@@ -1,11 +1,32 @@
-.App {
-  text-align: center;
+input {
+  padding: 6px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+input:focus {
+  border: 2px red solid;
+}
+button {
+  padding: 5px;
+  width: 5rem;
+  height: 2.0rem;
+}
+button:active {
+  position: relative;
+  top: 5px;
+}
+.search {
+  margin-top: 50px;
+  margin-left: 30px;
+}
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.results {
+  border: black 5px solid;
+  margin-top: 50px;
+}
+.headDiv1 {
+  padding: 25px;
 }
 
 .App-header {
@@ -19,21 +40,8 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 header {
-  background-color: black;
+  background-color: rgb(215, 68, 68);
   height: 100px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
