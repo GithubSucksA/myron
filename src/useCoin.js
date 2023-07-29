@@ -23,7 +23,7 @@ function UseCoin(props) {
       };
 
     return (
-        <div>
+        <div className="divver">
             {coin > 0 && <h5>You have {coin} {props.name}</h5>}
             <button onClick={handleIncrement}>Get {props.name}</button>
             <button onClick={handleVersionChange}>Donate {props.name}</button>

@@ -9,6 +9,6 @@ function formatDate(date) {
 
 export default function TodoList() {
   return (
-    <h1>To Do List for {formatDate(today)}</h1>
+    <h4>To Do List for {formatDate(today)}</h4>
   );
 }

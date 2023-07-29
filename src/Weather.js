@@ -13,7 +13,7 @@ function ShowWeather() {
     }
 
     const search = () => {
-        setCity(document.querySelector('.city').value);
+        //setCity(document.querySelector('.city').value);
         let api = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=e169fee9f4e25af4552c3c2f7074e854';
         fetch(api, boder).then((response) => {
             response.json().then(data => {
@@ -31,7 +31,7 @@ function ShowWeather() {
 
     return (
         <div>
-            <input onChange={adder} placeholder="sittard" class="city" type="text"/>
+            <input onChange={adder} placeholder="sittard" class="city" type="text" style={{marginRight: "10px", marginTop: "1rem"}}/>
             <button onClick={search}>send</button>
             <p>The temperature in {city} is: {celcius}</p>
         </div>

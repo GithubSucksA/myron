@@ -8,6 +8,7 @@ button {
   padding: 5px;
   width: 5rem;
   height: 2.0rem;
+  margin-bottom: 5px;
 }
 button:active {
   position: relative;
@@ -19,7 +20,9 @@ button:active {
 }
 .container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  border: 2px solid white;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 2rem;
 }
 .results {
   border: black 5px solid;
@@ -29,20 +32,9 @@ button:active {
   padding: 25px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
 header {
   background-color: rgb(215, 68, 68);
-  height: 100px;
+  height: 175px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
@@ -50,4 +42,16 @@ header {
 
 .headDiv {
   border: 5px solid #61dafb;
+}
+
+.divver {
+  text-align: center;
+  border: 5px rgb(50, 21, 81) solid;
+  border-radius: 10px;
+  height: 150px;
+  margin: 10px;
+}
+
+li {
+  display: block;
 }

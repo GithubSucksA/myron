@@ -3,44 +3,59 @@ import { useState } from 'react';
 import TodoList from './Date';
 import UseCoin from './useCoin';
 import MouseTracker from './mouse';
-import Form from './form';
 import ShowWeather from './Weather';
+import Todos from './Todo';
+import RequestTracker from './Tracker';
 
-//<Number|0>
 function App() {
-  //const [todos, setTodos] = useState(() => createTodos());  blijft hem steeds callen 
-  //const [todos, setTodos] = useState(createInitialTodos);   werkt als initializer en called 1 keer
-  const [version, setVersion] = useState(0);
-  const [firstName, setFirstName] = useState('');
 
-  const handleReset = () => {
-    setVersion(version + 1);
-  }
+  const [firstName, setFirstName] = useState('');
 
   return (
     <div className="App">
-      <header>
-        <div className='headDiv1'>
+      <div className='container'>
+        <div className='divver'>
           <ShowWeather />
         </div>
-        <div className='headDiv'></div>
-        <div className='headDiv'></div>
-      </header>
+        <div className='divver'>
+          <Todos />
+        </div>
+        <div className='divver'>
+          <RequestTracker />
+        </div>
+      </div>
       <div className="App-header">
-      <label>
-        First name:
-        <input value={firstName} onChange={e => setFirstName(e.target.value)} />
-      </label>
-      {firstName !== '' && <p>Your name is {firstName}.</p>}
-      <blockquote contenteditable="true">
-        <p>Edit this content to add your own quote</p>
-      </blockquote>
-      <TodoList />
-      <UseCoin name='eth'/>
-      <UseCoin name='btc' />
-      <MouseTracker />
-      <button onClick={handleReset}>Reset Component</button>
-      <Form key={version} />
+      <div class="container">
+        <label className='divver'>
+          <p>First name:</p>
+          <input value={firstName} onChange={e => setFirstName(e.target.value)} />
+          {firstName !== '' && <p>Your name is {firstName}.</p>}
+        </label>
+        <div className='divver'>
+          <blockquote contenteditable="true">
+            <p>Edit this content to add your own quote</p>
+          </blockquote>
+        </div>
+        <div className='divver'>
+          <TodoList/>
+        </div>
+      </div>
+      <div className='container'>
+        <UseCoin name='eth'/>
+        <UseCoin name='btc'/>
+        <MouseTracker />
+      </div>
+      <div className='container'>
+        <div className='divver'>
+
+        </div>
+        <div className='divver'>
+
+        </div>
+        <div className='divver'>
+
+        </div>
+      </div>
       </div>
     </div>
   );
